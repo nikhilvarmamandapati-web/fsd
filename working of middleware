@@ -1,0 +1,27 @@
+const express = require("express");
+
+const app = express();
+const PORT = 3000;
+
+// Middleware
+function logger(req, res, next) {
+    console.log(`${req.method} request received for ${req.url}`);
+    next();
+}
+
+// Use middleware
+app.use(logger);
+
+// Route
+app.get("/", (req, res) => {
+    res.send("Welcome to the Home Page");
+});
+
+app.get("/about", (req, res) => {
+    res.send("Welcome to the About Page");
+});
+
+// Start server
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+});
