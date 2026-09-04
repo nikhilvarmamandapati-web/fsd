@@ -1,0 +1,35 @@
+const express = require("express");
+
+const app = express();
+const PORT = 3000;
+
+app.use(express.json());
+
+let students = [];
+
+// 1. Accept data - POST
+app.post("/students", (req, res) => {
+    const student = req.body;
+    students.push(student);
+
+    res.send("Student data accepted successfully");
+});
+
+// 2. Retrieve data - GET
+app.get("/students", (req, res) => {
+    res.json(students);
+});
+
+// 3. Delete specified resource - DELETE
+app.delete("/students/:id", (req, res) => {
+    const id = req.params.id;
+
+    students = students.filter(student => student.id != id);
+
+    res.send(`Student with ID ${id} deleted successfully`);
+});
+
+// Start server
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+});
