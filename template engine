@@ -1,0 +1,22 @@
+<!DOCTYPE html> 
+<html> 
+<head>   
+<title><%= title %></title> </head> <body>   
+<h1>Welcome, <%= name %>!</h1>   
+<p>Today is <%= date %></p>    
+<h3>Your favorite subjects:</h3>   
+<ul>     <% subjects.forEach(function(sub) { %>       <li><%= sub %></li>     <% }); %>   </ul>     
+<% if (isStudent) { %>     <p>Status: You are registered as a student.</p>   <% }
+else { %>     <p>Status: Guest user.</p>   <% } %> Full Stack Development – 2  |  Lab Handout Page 4 of 18 </body> </html> app.js 
+const express = require('express');
+const app = express(); const PORT = 3000;  
+// Set EJS as the templating engine 
+app.set('view engine', 'ejs'); app.set('views', './views');   
+app.get('/',
+(req, res) => {   res.render('index',
+{     title: 'EJS Templating Demo',     name: 'Student',     date: new Date().toDateString(),     
+subjects: ['ExpressJS', 'ReactJS', 'MongoDB'],     isStudent: true   }); 
+});   
+app.listen(PORT, () => {   
+console.log(`Server running at http://localhost:${PORT}`); 
+}); 
