@@ -1,0 +1,79 @@
+<!DOCTYPE html> 
+<html>  
+<head>
+<title>Login</title>
+</head> 
+<body>   
+<h2>Login</h2>   
+<% if (error) { %>     <p style="color:red;"><%= error %></p>   <% } %>   <form action="/login" method="POST">     
+<label>Username:</label>     
+<input type="text" name="username" required>
+<br><br>     
+<label>Password:</label>     
+<input type="password" name="password" required><br><br>    
+<button type="submit">Login</button>   
+</form> 
+</body>
+</html> 
+views/dashboard.ejs 
+<!DOCTYPE html> 
+<html>
+<head>
+<title>Dashboard</title>
+</head> 
+<body>   
+<h2>Welcome, <%= username %>!</h2>   
+<p>You are logged in.</p>  
+<a href="/logout">Logout</a>
+</body>
+</html> 
+auth-app.js 
+const express = require('express');
+const session = require('express-session'); 
+const bcrypt = require('bcryptjs');   
+const app = express();
+const PORT = 3001;   
+app.set('view engine', 'ejs');
+app.use(express.urlencoded({ extended: true })); 
+app.use(session({ 
+secret: 'auth-secret-key',
+resave: false,   
+saveUninitialized: false }));   
+// Simulated user database with a pre-hashed password ("password123") 
+const users = [   { username: 'admin', password: bcrypt.hashSync('password123', 10) } ]; 
+// Middleware to protect routes
+function isAuthenticated(req, res, next) { 
+if (req.session.user) {   
+return next();   }  
+res.redirect('/login');  }   // GET login page
+app.get('/login', (req, res) => { 
+res.render('login', { error: null });
+});   
+// POST login — verify credentials
+app.post('/login', (req, res) => {
+const { username, password } = req.body;
+const user = users.find(u => u.username === username);
+if (!user) { 
+return res.render('login', { error: 'User not found.' }); 
+}     
+const isMatch = bcrypt.compareSync(password, user.password); 
+if (!isMatch) {  
+return res.render('login', { error: 'Incorrect password.' });
+}     
+// Authentication successful — store user in session   
+req.session.user = username;  
+res.redirect('/dashboard'); });  
+// Protected dashboard route 
+app.get('/dashboard', isAuthenticated, (req, res) => { 
+res.render('dashboard',
+{ username: req.session.user }); 
+});   
+// Logout 
+app.get('/logout', (req, res) => {
+req.session.destroy(() => {
+res.redirect('/login');   
+}); 
+});   
+app.listen(PORT, () => { 
+console.log(`Server running at http://localhost:${PORT}`);
+}); 
