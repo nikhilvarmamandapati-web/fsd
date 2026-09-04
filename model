@@ -1,0 +1,83 @@
+const mongoose = require('mongoose');
+const studentSchema = new mongoose.Schema({
+name: { type: String, required: true },
+branch: { type: String, required: true },
+year: { type: Number, required: true },
+cgpa: { type: Number, default: 0 } });
+module.exports = mongoose.model('Student', studentSchema);
+ejs-crud-app.js const express = require('express');
+const mongoose = require('mongoose');
+const path = require('path'); 
+const Student = require('./models/Student'); 
+const app = express(); const PORT = 3000;
+// Set EJS as the templating engine
+app.set('view engine', 'ejs'); 
+app.set('views', path.join(__dirname, 'views'));  
+// Middleware 
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());   
+// MongoDB Connection 
+const startServer = async () => {
+try {     
+await mongoose.connect('mongodb://127.0.0.1:27017/studentDB');
+console.log('MongoDB connected'); 
+app.listen(PORT, () => {   
+console.log(`Server running at http://localhost:${PORT}`);
+});   } 
+catch (err) {     
+console.error('MongoDB connection failed. Start MongoDB and try again.'); 
+console.error(err.message);     process.exitCode = 1;   
+} };  
+// READ — render main page with all students and insert form
+app.get('/', async (req, res) => { 
+try {    
+const students = await Student.find();
+res.render('index', { students });   } 
+catch (err) {    
+res.status(500).send(err.message);
+} });  
+// CREATE — add student and refresh page
+app.post('/students', async (req, res) => {  
+try { 
+const student = new Student({ 
+name: req.body.name, 
+branch: req.body.branch,  
+year: Number(req.body.year),  
+cgpa: req.body.cgpa ? Number(req.body.cgpa) : 0     });  
+await student.save();    
+res.redirect('/');   }
+catch (err) { 
+res.status(400).send(err.message);
+} });  
+// READ — render edit form for a single student
+app.get('/students/edit/:id', async (req, res) => { 
+try {    
+const student = await Student.findById(req.params.id);   
+if (!student) return res.status(404).send('Student not found');
+res.render('edit', { student });
+} catch (err) { 
+res.status(400).send(err.message); 
+} });  
+// UPDATE — save changes to student and redirect to main page 
+app.post('/students/update/:id', async (req, res) => {
+try {     
+const update = {       
+name: req.body.name,      
+branch: req.body.branch,      
+year: Number(req.body.year),       
+cgpa: req.body.cgpa ? Number(req.body.cgpa) : 0     }; 
+await Student.findByIdAndUpdate(req.params.id, update,
+{ runValidators: true }); 
+res.redirect('/');   }
+catch (err) {   
+res.status(400).send(err.message);
+} });
+// DELETE — remove student and redirect to main page 
+app.post('/students/delete/:id', async (req, res) => {
+try {    
+await Student.findByIdAndDelete(req.params.id);     
+res.redirect('/');   } 
+catch (err) {   
+res.status(400).send(err.message);
+} }); 
+startServer(); 
