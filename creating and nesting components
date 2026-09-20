@@ -1,0 +1,38 @@
+function Header() { 
+  return (  
+    <header style={{ background: '#0EA5A0', color: 'white', padding: '12px' }}> 
+    <h2>Student Portal</h2>    
+    </header>   );
+  }   export default Header;
+ (class component) 
+  import { Component } from 'react'; 
+  class Footer extends Component {  
+      render() {  
+        return (    
+          <footer style={{ background: '#1E293B', color: 'white', padding: '10px', textAlign: 'center' }}>  
+          <p>&copy; 
+          {new Date().getFullYear()} Full Stack Development Lab</p> 
+          </footer>     );  
+        } }  
+    export default Footer;
+    src/components/ProfileCard.jsx (function component — nests Header and Footer) import Header from './Header'; import Footer from './Footer'; 
+    function ProfileCard({ name, branch, year }) { 
+      return (  
+        <div style={{ border: '1px solid #ccc', borderRadius: '8px', overflow: 'hidden', maxWidth: '400px' }}>   
+          <Header /> Full Stack Development – 2  |  Lab Handout Page 4 of 5       <div style={{ padding: '16px' }}>  
+          <h3>{name}</h3>         <p>Branch: {branch}</p>         <p>Year: {year}</p>       </div>       <Footer />  
+          </div>   );
+          }   export default ProfileCard;
+          import ProfileCard from './components/ProfileCard';  
+          function App() { 
+            return (   
+              <div style={{ display: 'flex', gap: '20px', padding: '20px', flexWrap: 'wrap' }}>  
+              <ProfileCard name="Anitha" branch="CSE" year={3} />
+              <ProfileCard name="Ravi" branch="ECE" year={2} />  
+              </div>   );
+            }  
+          export default App;
+           { createRoot } from 'react-dom/client';
+          import App from './App'; 
+          const root = createRoot(document.getElementById('root'));
+            root.render(<App />); 
