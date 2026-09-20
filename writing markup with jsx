@@ -1,0 +1,23 @@
+import { createRoot } from 'react-dom/client';  
+const container = (   <div>     <h1 style={{ color: 'teal' }}>Hello from React!</h1>
+<p>This paragraph was rendered using JSX.</p> 
+<ul>       
+<li>ExpressJS</li>      
+<li>ReactJS</li>      
+<li>MongoDB</li>    
+</ul> 
+</div> );   
+const root = createRoot(document.getElementById('root'));
+root.render(container);
+A version using JavaScript expressions inside JSX
+import { createRoot } from 'react-dom/client';  
+const name = 'Student'; const subjects = ['ExpressJS', 'ReactJS', 'MongoDB'];
+const isEnrolled = true;   const container = (   <div>  
+<h1>Welcome, {name}!</h1>  
+<p>Today is {new Date().toDateString()}</p> 
+<ul>       {subjects.map((subject, index) => (     
+<li key={index}>{subject}</li>       ))} 
+</ul>    
+{isEnrolled ? <p>Status: Enrolled</p> : <p>Status: Not enrolled</p>}   </div> ); 
+const root = createRoot(document.getElementById('root'));
+root.render(container); 
