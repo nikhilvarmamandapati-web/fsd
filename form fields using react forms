@@ -1,0 +1,66 @@
+ import React, { useState } from 'react'; 
+ export default function ReactForms() { 
+   const [formData, setFormData] = useState({
+   username: '',  
+   role: 'developer',   
+   experienceLevel: 'junior', 
+   agreeToTerms: false   }); 
+   const handleChange = (e) => {  
+   const { name, value, type, checked } = e.target;   
+   setFormData(prevState => ({    
+   ...prevState,       // If it's a checkbox, use the 'checked' boolean; otherwise use the string 'value'       [name]: type === 'checkbox' ? checked : value     })); 
+   };   
+   const handleSubmit = (e) => { 
+   e.preventDefault();
+   // Prevents the page from reloading    
+   alert(`Form Submitted Successfully!\n\nData: ${JSON.stringify(formData, null, 2)}`); 
+   };   
+   return (    
+   <div style={{ padding: '20px', fontFamily: 'sans-serif', maxWidth: '400px' }}>  
+   <h2>React Forms Example</h2>        
+   <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>          
+   {/* 1. Text Input */}        
+   <div>         
+   <label>Username: </label>        
+   <input              type="text"              name="username"              value={formData.username}             
+   onChange={handleChange}              required            /> 
+   </div>          
+   {/* 2. Select / Dropdown */}        
+   <div>          
+   <label>Role: </label>           
+   <select name="role" value={formData.role} onChange={handleChange}> 
+   <option value="developer">Developer</option> 
+   <option value="designer">Designer</option>            
+   <option value="manager">Manager</option>           
+   </select>        
+   </div>          {/* 3. Radio Buttons */}         <div>
+  <label>Experience Level: </label>   
+  <div>           
+  <label>        <input                  type="radio"                  name="experienceLevel"                  value="junior"                  
+  checked={formData.experienceLevel === 'junior'} 
+  onChange={handleChange}                /> Junior         
+  </label>            
+  <label style={{ marginLeft: '10px' }}>   
+  <input                  type="radio"                  name="experienceLevel"                  value="senior"                  checked={formData.experienceLevel === 'senior'}
+  onChange={handleChange}              
+  /> Senior             
+  </label>          
+  </div>         </div>         
+  {/* 4. Checkbox */}       
+  <div>         
+  <label>             <input                type="checkbox"                name="agreeToTerms"             
+  checked={formData.agreeToTerms}              
+  onChange={handleChange}              /
+  I agree to the terms and conditions          
+  </label>         </div>     
+  <button type="submit" disabled={!formData.agreeToTerms}> 
+  Submit Form  
+  </button>  
+  </form>  
+  </div>   );
+  }   src/App.jsx 
+  import RegistrationForm from './components/RegistrationForm';
+  function App() {
+  return <RegistrationForm />;
+  }  
+  export default App; 
