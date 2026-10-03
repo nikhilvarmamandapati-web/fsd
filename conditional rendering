@@ -1,0 +1,56 @@
+import { useState } from 'react'; 
+  if / else with an early return function Greeting({ isLoggedIn, name }) 
+  {   if (isLoggedIn) { 
+    return <h3>Welcome back, {name}!</h3>;  
+  }  
+   return <h3>Please log in to continue.</h3>;
+  }  
+// Technique 4: switch statement to pick one of many outputs 
+function RolePanel({ role }) {  
+  switch (role) {    
+    case 'student':
+      return <p>Student panel: view timetable, marks and assignments.</p>; 
+    case 'faculty':       return <p>Faculty panel: upload marks, post assignments.</p>;  
+    case 'admin':       return <p>Admin panel: manage users and courses.</p>; 
+    default:       return <p>Unknown role.</p>;   } }
+function ConditionalDemo() { 
+const [isLoggedIn, setIsLoggedIn] = useState(false); 
+const [showDetails, setShowDetails] = useState(false);  
+const [unread, setUnread] = useState(3);
+const [role, setRole] = useState('student');
+// Technique 2: store an element in a variable, then render it   let authButton; 
+if (isLoggedIn) { 
+authButton = <button onClick={() => setIsLoggedIn(false)}>Logout</button>;
+} else {   
+authButton = <button onClick={() => setIsLoggedIn(true)}>Login</button>;
+}     return (     <div style={{ maxWidth: '520px', margin: '30px auto', fontFamily: 'Arial' }}>  
+<h2>Conditional Rendering Demo</h2>    
+<section>        
+<h4>1. if / else and element variable</h4> 
+<Greeting isLoggedIn={isLoggedIn} name="Anitha" />    
+{authButton}  
+</section>         <section>   
+<h4>2. Ternary operator (condition ? A : B)</h4>  
+<button onClick={() => setShowDetails(!showDetails)}>   
+{showDetails ? 'Hide details' : 'Show details'}      
+</button>         {showDetails ? (           <p>React re-renders whenever state changes, so this text appears and disappears.</p>) :
+(           <p>Details are hidden.</p>         )} 
+</section>         <section>         
+<h4>3. Logical AND (condition &amp;&amp; element)</h4>    
+{isLoggedIn && unread > 0 && (           <p>You have {unread} unread message{unread > 1 ? 's' : ''}.</p>         
+)}         {isLoggedIn && (           <button onClick={() => setUnread(unread > 0 ? unread - 1 : 0)}>             
+</button>        
+)}        
+{!isLoggedIn && <p>Log in to see your messages.</p>}     
+</section>         <section>       
+<h4>4. switch statement</h4>       
+<label>          
+Role:{' '}         
+<select value={role} onChange={(e) => setRole(e.target.value)}>         
+<option value="student">Student</option>         
+<option value="faculty">Faculty</option>         
+<option value="admin">Admin</option>         
+</select>         </label>        
+<RolePanel role={role} />     
+</section>     </div>   ); }  
+export default ConditionalDemo; 
