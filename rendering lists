@@ -1,0 +1,43 @@
+const subjects = ['ExpressJS', 'ReactJS', 'MongoDB', 'Node.js'];
+const initialStudents = [   
+  { id: 1, name: 'Anitha', branch: 'CSE', year: 3, cgpa: 8.9 },  
+  { id: 2, name: 'Ravi', branch: 'ECE', year: 2, cgpa: 7.8 },  
+  { id: 3, name: 'Sneha', branch: 'CSE', year: 3, cgpa: 9.1 },  
+  { id: 4, name: 'Kiran', branch: 'MECH', year: 4, cgpa: 7.2 },  
+  { id: 5, name: 'Meena', branch: 'ECE', year: 3, cgpa: 8.4 } ];   
+function ListDemo() { 
+  return (  
+    <div style={{ maxWidth: '600px', margin: '30px auto', fontFamily: 'Arial' }}> 
+    <h2>Rendering Lists Demo</h2>   
+    <h4>1. List of strings — key is the value itself</h4>
+    <ul>         {subjects.map((subject) => (  
+      <li key={subject}>{subject}</li>  
+    ))}       
+    </ul>         
+    <h4>2. List of objects — key is a unique id</h4>                        
+    <table style={{ width: '100%', borderCollapse: 'collapse' }}>   
+    <thead>             
+    <tr>              
+    <th>Name</th>              
+    <th>Branch</th>              
+    <th>Year</th>              
+    <th>CGPA</th>            
+    </tr>          
+    </thead>          
+    <tbody>             
+    {initialStudents.map((student) => (        
+      <StudentRow key={student.id} student={student} />    
+    ))}          
+    </tbody>        
+    </table>         
+    </div>   ); }  
+function StudentRow({ student }) { 
+  return (     
+    <tr>      
+    <td>{student.name}</td>      
+    <td>{student.branch}</td>       
+    <td>{student.year}</td>       
+    <td>{student.cgpa.toFixed(1)}</td>    
+    </tr>   ); 
+} 
+export default ListDemo; 
